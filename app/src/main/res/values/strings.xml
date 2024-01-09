@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ActionAble</string>
+    <string name="dialog_add_task_title_hint">New Task</string>
+    <string name="dialog_add_task_add_details_hint">Add details</string>
+    <string name="dialog_add_task_details_button">Add details</string>
+    <string name="dialog_add_task_star_button">Star task</string>
+    <string name="dialog_add_task_save_button">Save</string>
 </resources>
