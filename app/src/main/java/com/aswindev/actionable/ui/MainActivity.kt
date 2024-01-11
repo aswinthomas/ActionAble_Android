@@ -1,4 +1,4 @@
-package com.aswindev.actionable
+package com.aswindev.actionable.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,8 +13,8 @@ import com.aswindev.actionable.data.Task
 import com.aswindev.actionable.data.TaskDao
 import com.aswindev.actionable.databinding.ActivityMainBinding
 import com.aswindev.actionable.databinding.DialogAddTaskBinding
+import com.aswindev.actionable.ui.tasks.TasksFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +27,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var database: ActionAbleDatabase
-    private val taskDao: TaskDao by lazy { database.getTaskDao() }
+    private val taskDao: TaskDao by lazy {
+        database = ActionAbleDatabase.getDatabase(this)
+        database.getTaskDao()
+    }
+    private val tasksFragment: TasksFragment = TasksFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +44,6 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         setAddTaskDialog()
-
-        database = ActionAbleDatabase.createDatabase(this)
 
         lifecycleScope.launch {
             taskDao.createTask(
@@ -76,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                     taskDao.createTask(task)
                 }
                 dialog.dismiss()
+                tasksFragment.fetchAllTasks()
             }
             dialog.show()
         }
@@ -85,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         override fun getItemCount() = NUM_TABS
 
         override fun createFragment(position: Int): Fragment {
-            return TasksFragment()
+            return tasksFragment
         }
 
     }
