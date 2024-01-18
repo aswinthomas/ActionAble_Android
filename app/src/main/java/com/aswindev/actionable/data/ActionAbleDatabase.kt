@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Task::class], version = 1)
+@Database(entities = [Task::class], version = 2)
 abstract class ActionAbleDatabase : RoomDatabase() {
 
     companion object {
@@ -18,14 +18,16 @@ abstract class ActionAbleDatabase : RoomDatabase() {
                     context,
                     ActionAbleDatabase::class.java,
                     "actionable-database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 DB_INSTANCE = instance
                 instance
             }
         }
     }
 
-    abstract fun getTaskDao() : TaskDao
+    abstract fun getTaskDao(): TaskDao
 }
 
 

@@ -44,20 +44,6 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
         setAddTaskDialog()
-
-        lifecycleScope.launch {
-            taskDao.createTask(
-                Task(
-                    title = "New Title",
-                    description = "Some description",
-                    isStarred = true
-                )
-            )
-            val tasks = taskDao.getAllTasks()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@MainActivity, "Number of tasks: ${tasks.size}", Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     private fun setAddTaskDialog() {
@@ -77,8 +63,8 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     taskDao.createTask(task)
                 }
-                dialog.dismiss()
                 tasksFragment.fetchAllTasks()
+                dialog.dismiss()
             }
             dialog.show()
         }
